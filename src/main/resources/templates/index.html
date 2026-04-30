@@ -1,0 +1,111 @@
+<!--
+
+- AUTHENTICATION PAGE -
+: De Luna, Jay Lawrence S.
+
+-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../static/css/authentication_page/style.css">
+    </head>
+    <body>
+        <main>
+            <img src="../static/uploads/gc_logo.png" alt="Gordon College - Seal">
+            <h1>STUDENT GRADE TRACKER</h1>
+            <form class="log_in_form">
+                <div class="auth_input">
+                    <input
+                        type="text"
+                        name="user_input"
+                        id="log_in_user_input"
+                        required
+                        >
+                    <label for="user_input">USERNAME:</label>
+                </div>
+                <div class="auth_input">
+                    <input
+                        type="password"
+                        name="pw_input"
+                        id="log_in_pw_input"
+                        required
+                        >
+                    <label for="pw_input">PASSWORD:</label>
+                </div>
+                <button class="animated_btn" type="submit">LOG IN</button>
+            </form>
+            <p>No account? <a id="modal_trigger">Create an account here.</a></p>
+        </main>
+        <div class="side_bg"></div>
+        <div class="modal" id="modal">
+            <div class="modal_bg"></div>
+            <div class="modal_content">
+                <button class="modal_return" id="modal_return">GO BACK</button>
+                <form class="sign_up_form">
+                    <div class="su_form">
+                        <div class="auth_input">
+                            <input
+                                type="text"
+                                name="su_last_name"
+                                id="su_last_name"
+                                required
+                                >
+                            <label for="su_last_name">LAST NAME:</label>
+                        </div>
+                        <div class="auth_input">
+                            <input
+                                type="text"
+                                name="su_first_name"
+                                id="su_first_name"
+                                required
+                                >
+                            <label for="su_first_name">FIRST NAME:</label>
+                        </div>
+                        <div class="auth_input">
+                            <input
+                                type="text"
+                                name="su_middle_name"
+                                id="su_middle_name"
+                                required
+                                >
+                            <label for="su_middle_name">MIDDLE NAME:</label>
+                        </div>
+                        <div class="auth_input">
+                            <input
+                                type="text"
+                                name="su_user_name"
+                                id="su_user_name"
+                                required
+                                >
+                            <label for="su_user_name">USERNAME:</label>
+                        </div>
+                        <div class="auth_input">
+                            <input
+                                type="password"
+                                name="su_pw"
+                                id="su_pw"
+                                required
+                                >
+                            <label for="su_pw">PASSWORD:</label>
+                        </div>
+                        <div class="auth_input">
+                            <input
+                                type="password"
+                                name="su_confirm_pw"
+                                id="su_confirm_pw"
+                                required
+                                >
+                            <label for="su_confirm_pw">CONFIRM PASSWORD:</label>
+                        </div>
+                    </div>
+                    <button class="animated_btn" type="submit">CREATE AN ACCOUNT</button>
+                </form>
+                <p>In signing up, you give us permission to collect personal information that includes your name.</p>
+            </div>
+        </div>
+        <script src="../static/js/ui/authPage.js"></script>
+    </body>
+</html>
