@@ -10,30 +10,30 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../static/css/authentication_page/style.css">
+        <link rel="stylesheet" href="css/authentication_page/style.css">
     </head>
     <body>
         <main>
-            <img src="../static/uploads/gc_logo.png" alt="Gordon College - Seal">
+            <img src="uploads/gc_logo.png" alt="Gordon College - Seal">
             <h1>STUDENT GRADE TRACKER</h1>
-            <form class="log_in_form">
+            <form class="log_in_form" id="logInForm">
                 <div class="auth_input">
                     <input
                         type="text"
-                        name="user_input"
-                        id="log_in_user_input"
+                        name="user"
+                        id="logInUser"
                         required
                         >
-                    <label for="user_input">USERNAME:</label>
+                    <label for="logInUser">USERNAME:</label>
                 </div>
                 <div class="auth_input">
                     <input
                         type="password"
-                        name="pw_input"
-                        id="log_in_pw_input"
+                        name="pw"
+                        id="logInPw"
                         required
                         >
-                    <label for="pw_input">PASSWORD:</label>
+                    <label for="logInPw">PASSWORD:</label>
                 </div>
                 <button class="animated_btn" type="submit">LOG IN</button>
             </form>
@@ -106,6 +106,7 @@
                 <p>In signing up, you give us permission to collect personal information that includes your name.</p>
             </div>
         </div>
-        <script src="../static/js/ui/authPage.js"></script>
+        <script src="js/ui/authPage.js"></script>
+        <script src="js/auth/script.js"></script>
     </body>
 </html>
