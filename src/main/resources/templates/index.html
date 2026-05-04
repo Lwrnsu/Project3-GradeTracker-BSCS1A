@@ -10,30 +10,30 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="../static/css/authentication_page/style.css">
+        <link rel="stylesheet" href="css/authentication_page/style.css">
     </head>
     <body>
         <main>
-            <img src="../static/uploads/gc_logo.png" alt="Gordon College - Seal">
+            <img src="uploads/gc_logo.png" alt="Gordon College - Seal">
             <h1>STUDENT GRADE TRACKER</h1>
-            <form class="log_in_form">
+            <form class="log_in_form" id="logInForm">
                 <div class="auth_input">
                     <input
                         type="text"
-                        name="user_input"
-                        id="log_in_user_input"
+                        name="user"
+                        id="logInUser"
                         required
                         >
-                    <label for="user_input">USERNAME:</label>
+                    <label for="logInUser">USERNAME:</label>
                 </div>
                 <div class="auth_input">
                     <input
                         type="password"
-                        name="pw_input"
-                        id="log_in_pw_input"
+                        name="pw"
+                        id="logInPw"
                         required
                         >
-                    <label for="pw_input">PASSWORD:</label>
+                    <label for="logInPw">PASSWORD:</label>
                 </div>
                 <button class="animated_btn" type="submit">LOG IN</button>
             </form>
@@ -44,61 +44,60 @@
             <div class="modal_bg"></div>
             <div class="modal_content">
                 <button class="modal_return" id="modal_return">GO BACK</button>
-                <form class="sign_up_form">
+                <form class="sign_up_form" id="signUpForm">
                     <div class="su_form">
                         <div class="auth_input">
                             <input
                                 type="text"
                                 name="su_last_name"
-                                id="su_last_name"
+                                id="suLastName"
                                 required
                                 >
-                            <label for="su_last_name">LAST NAME:</label>
+                            <label for="suLastName">LAST NAME:</label>
                         </div>
                         <div class="auth_input">
                             <input
                                 type="text"
                                 name="su_first_name"
-                                id="su_first_name"
+                                id="suFirstName"
                                 required
                                 >
-                            <label for="su_first_name">FIRST NAME:</label>
+                            <label for="suFirstName">FIRST NAME:</label>
                         </div>
                         <div class="auth_input">
                             <input
                                 type="text"
                                 name="su_middle_name"
-                                id="su_middle_name"
-                                required
+                                id="suMiddleName"
                                 >
-                            <label for="su_middle_name">MIDDLE NAME:</label>
+                            <label for="suMiddleName">MIDDLE NAME:</label>
                         </div>
                         <div class="auth_input">
                             <input
                                 type="text"
                                 name="su_user_name"
-                                id="su_user_name"
+                                id="suUsername"
                                 required
                                 >
-                            <label for="su_user_name">USERNAME:</label>
+                            <label for="suUsername">USERNAME:</label>
                         </div>
                         <div class="auth_input">
                             <input
                                 type="password"
                                 name="su_pw"
-                                id="su_pw"
+                                id="suPw"
                                 required
                                 >
-                            <label for="su_pw">PASSWORD:</label>
+                            <label for="suPw">PASSWORD:</label>
                         </div>
                         <div class="auth_input">
                             <input
                                 type="password"
                                 name="su_confirm_pw"
-                                id="su_confirm_pw"
+                                id="suConfirmPw"
                                 required
                                 >
-                            <label for="su_confirm_pw">CONFIRM PASSWORD:</label>
+                            <label for="suConfirmPw">CONFIRM PASSWORD:</label>
                         </div>
                     </div>
                     <button class="animated_btn" type="submit">CREATE AN ACCOUNT</button>
@@ -106,6 +105,14 @@
                 <p>In signing up, you give us permission to collect personal information that includes your name.</p>
             </div>
         </div>
-        <script src="../static/js/ui/authPage.js"></script>
+
+        <div class="notification" id="notification">
+            <h6 class="notif_title" id="notifTitle">Notification.</h6>
+            <p class="notif_msg" id="notifMsg"></p>
+            <p class="http_code" id="notifCode"></p>
+        </div>
+
+        <script src="js/ui/authPage.js"></script>
+        <script src="js/auth/script.js"></script>
     </body>
 </html>
