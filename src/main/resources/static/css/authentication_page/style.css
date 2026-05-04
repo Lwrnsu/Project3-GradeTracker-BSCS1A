@@ -159,6 +159,41 @@ main a {
     font-style: italic;
 }
 
+.notification {
+    display: none;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: white;
+    padding: 10px 20px;
+    border: 2px solid black;
+    border-radius: 8px;
+}
+
+.notif_title {
+    font-size: 16px;
+    border-bottom: 1px solid black;
+}
+
+.notif_msg {
+    font-size: 14px;
+    margin: 4px 0px;
+}
+
+.http_code {
+    font-size: 10px;
+}
+
+.success {
+    background-color: lightgreen;
+    border-color: green;
+}
+
+.failed {
+    background-color: lightcoral;
+    border-color: red;
+}
+
 .active {
     display: block;
 }
