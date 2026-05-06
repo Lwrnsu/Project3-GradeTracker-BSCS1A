@@ -10,4 +10,6 @@ import lombok.NoArgsConstructor;
 public class Statistics {
     private int totalStudents;
     private int totalSubjects;
+    private int totalPassing;
+    private int totalFailing;
 }

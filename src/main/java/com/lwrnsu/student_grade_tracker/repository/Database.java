@@ -204,4 +204,36 @@ public class Database {
             throw new DatabaseConnectionException("Database not found.");
         }
     }
+
+    public int getTotalPassing() {
+        String sql = "SELECT COUNT(*) FROM tbl_grades WHERE grade >= 75;";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("COUNT(*)");
+            }
+            throw new UserNotFoundException("User not found.");
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public int getTotalFailing() {
+        String sql = "SELECT COUNT(*) FROM tbl_grades WHERE grade < 75;";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("COUNT(*)");
+            }
+            throw new UserNotFoundException("User not found.");
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
 }

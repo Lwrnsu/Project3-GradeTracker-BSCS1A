@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 
 import com.lwrnsu.student_grade_tracker.errors.InvalidCredentialsException;
 import com.lwrnsu.student_grade_tracker.models.LogInRequest;
-import com.lwrnsu.student_grade_tracker.models.User;
 import com.lwrnsu.student_grade_tracker.models.Statistics;
+import com.lwrnsu.student_grade_tracker.models.User;
 import com.lwrnsu.student_grade_tracker.repository.Database;
 
 @Service
@@ -43,7 +43,7 @@ public class UserServices {
 
     public Statistics getStatistics(String username) {
         int id = database.getUserID(username);
-        return new Statistics(database.getTotalStudents(id), database.getTotalSubjects(id));
+        return new Statistics(database.getTotalStudents(id), database.getTotalSubjects(id), database.getTotalPassing(), database.getTotalFailing());
     }
 }
 

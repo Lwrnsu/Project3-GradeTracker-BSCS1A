@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="css/components/nav.css">
     </head>
     <body>
-        <nav class="hide">
+        <nav id="nav">
             <img src="uploads/gc_logo.png" alt="Gordon College Logo">
             <p id="username">N/A</p>
             <ul>
@@ -22,6 +22,9 @@
         </nav>
         <main>
             <div class="top">
+                <button class="menu_img" id="navToggleBtn">
+                    <img src="uploads/menu.png">
+                </button>
             </div>
             <div class="header">
                 <h4 id="name">N/A</h4>
@@ -38,16 +41,17 @@
                 </div>
                 <div class="content_cards">
                     <p>Number of students passing.</p>
-                    <p>N/A</p>
+                    <p id="totalPassing">N/A</p>
                 </div>
                 <div class="content_cards">
                     <p>Number of students failing.</p>
-                    <p>N/A</p>
+                    <p id="totalFailing">N/A</p>
                 </div>
             </div>
         </main>
 
         <script src="js/components/security.js"></script>
+        <script src="js/components/nav.js"></script>
         <script src="js/ui/homePage.js"></script>
     </body>
 </html>

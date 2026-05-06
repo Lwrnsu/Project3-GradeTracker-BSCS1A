@@ -2,6 +2,8 @@ const username = document.getElementById("username");
 const displayName = document.getElementById("name");
 const totalStudents = document.getElementById("totalStudents");
 const totalSubjects = document.getElementById("totalSubjects");
+const totalPassing = document.getElementById("totalPassing");
+const totalFailing = document.getElementById("totalFailing");
 
 let middleName = sessionStorage.getItem('middleName');
 
@@ -19,6 +21,8 @@ document.addEventListener("DOMContentLoaded", async function() {
     if (result.success) {
         totalStudents.innerText = result.data.totalStudents;
         totalSubjects.innerText = result.data.totalSubjects;
+        totalPassing.innerText = result.data.totalPassing;
+        totalFailing.innerText = result.data.totalFailing;
     } else if (!result.success) {
         alert(result.message);
     }
