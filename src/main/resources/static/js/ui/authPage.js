@@ -16,10 +16,10 @@ document.addEventListener('click', (event) => {
 
 function successNotif(msg, codeStatus) {
     setTimeout(() => {
-        notification.classList.toggle('active');
-        notification.classList.toggle('success');
         notifMsg.innerText = msg;
         notifCode.innerText = `HTTP: ${codeStatus}`;
+        notification.classList.toggle('success');
+        notification.classList.toggle('active');
     }, 2000);
     notification.classList.toggle('active');
     notification.classList.toggle('success');
@@ -27,10 +27,10 @@ function successNotif(msg, codeStatus) {
 
 function failedNotif(msg, codeStatus) {
     setTimeout(() => {
-        notification.classList.toggle('active');
-        notification.classList.toggle('failed');
         notifMsg.innerText = msg;
         notifCode.innerText = `HTTP: ${codeStatus}`;
+        notification.classList.toggle('failed');
+        notification.classList.toggle('active');
     }, 2000);
     notification.classList.toggle('active');
     notification.classList.toggle('failed');
@@ -38,10 +38,10 @@ function failedNotif(msg, codeStatus) {
 
 function wrongPw() {
     setTimeout(() => {
-        notification.classList.toggle('active');
-        notification.classList.toggle('failed');
         notifMsg.innerText = "Password didn't matched.";
         notifCode.innerText = '';
+        notification.classList.toggle('failed');
+        notification.classList.toggle('active');
     }, 2000);
     notification.classList.toggle('active');
     notification.classList.toggle('failed');

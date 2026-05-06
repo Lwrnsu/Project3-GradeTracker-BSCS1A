@@ -11,9 +11,9 @@ public class PathController {
         return "index";
     }
 
-    @GetMapping("/dashboard")
+    @GetMapping("/home")
     public String dashboard() {
-        return "dashboard";
+        return "home";
     }
 
 }

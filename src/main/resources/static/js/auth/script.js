@@ -20,7 +20,12 @@ form.addEventListener('submit', async function(event) {
     console.log(result.message + " " + api.status);
 
     if (result.success) {
-        window.location.href = "/dashboard";
+        sessionStorage.setItem('isLoggedIn', 'true');
+        sessionStorage.setItem('username', result.data.username);
+        sessionStorage.setItem('lastName', result.data.lastName);
+        sessionStorage.setItem('firstName', result.data.firstName);
+        sessionStorage.setItem('middleName', result.data.middleName);
+        window.location.href = "/home";
     } else if (!result.success) {
         failedNotif(result.message, api.status);
     }

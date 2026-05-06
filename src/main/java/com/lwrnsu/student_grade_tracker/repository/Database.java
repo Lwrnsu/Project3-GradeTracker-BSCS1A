@@ -46,7 +46,7 @@ public class Database {
     }
 
     public String getPassword(String username) {
-        String sql = "SELECT password FROM tbl_users WHERE username=?";
+        String sql = "SELECT password FROM tbl_users WHERE username=?;";
         try(
             Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -64,7 +64,7 @@ public class Database {
     }
 
     public void signUp(String lName, String fName, String username, String password) {
-        String sql = "INSERT INTO tbl_users(username, password, last_name, first_name) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO tbl_users(username, password, last_name, first_name) VALUES (?, ?, ?, ?);";
         try (
             Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -83,7 +83,7 @@ public class Database {
     }
 
     public void signUp(String lName, String fName, String mName, String username, String password) {
-        String sql = "INSERT INTO tbl_users(username, password, last_name, first_name, middle_name) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO tbl_users(username, password, last_name, first_name, middle_name) VALUES (?, ?, ?, ?, ?);";
         try (
             Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -97,6 +97,57 @@ public class Database {
 
         } catch (SQLIntegrityConstraintViolationException e) {
             throw new UserAlreadyExistException("Username already exist.");
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public String getLastName(String username) {
+        String sql = "SELECT last_name FROM tbl_users WHERE username=?;";
+        try(
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next()) {
+                return rs.getString("last_name");
+            }
+            throw new UserNotFoundException("User not found.");
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public String getFirstName(String username) {
+        String sql = "SELECT first_name FROM tbl_users WHERE username=?;";
+        try(
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("first_name");
+            }
+            throw new UserNotFoundException("User not found.");
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public String getMiddleName(String username) {
+        String sql = "SELECT middle_name FROM tbl_users WHERE username=?;";
+        try(
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setString(1, username);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("middle_name");
+            }
+            throw new UserNotFoundException("User not found.");
         } catch (SQLException e) {
             throw new DatabaseConnectionException("Database not found.");
         }
@@ -120,5 +171,69 @@ public class Database {
         }
     }
 
+    public int getTotalStudents(int id) {
+        String sql = "SELECT COUNT(*) FROM tbl_students WHERE fk_user_id=?;";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("COUNT(*)");
+            }
+            throw new UserNotFoundException("User not found.");
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+    
+    public int getTotalSubjects(int id) {
+        String sql = "SELECT COUNT(*) FROM tbl_subjects WHERE fk_user_id=?;";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("COUNT(*)");
+            }
+            throw new UserNotFoundException("User not found.");
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
 
+    public int getTotalPassing() {
+        String sql = "SELECT COUNT(*) FROM tbl_grades WHERE grade >= 75;";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("COUNT(*)");
+            }
+            throw new UserNotFoundException("User not found.");
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public int getTotalFailing() {
+        String sql = "SELECT COUNT(*) FROM tbl_grades WHERE grade < 75;";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("COUNT(*)");
+            }
+            throw new UserNotFoundException("User not found.");
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
 }
