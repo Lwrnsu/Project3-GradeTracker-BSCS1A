@@ -12,18 +12,18 @@
             <img src="uploads/gc_logo.png" alt="Gordon College Logo">
             <p id="username">N/A</p>
             <ul>
-                <li><button class="active">Home</button></li>
-                <li><button>Students</button></li>
-                <li><button>Subjects</button></li>
-                <li><button>Grades</button></li>
-                <li><button>Account</button></li>
-                <li><button class="logOut">Log Out</button></li>
+                <li><button class="active" id="homeNav">Home</button></li>
+                <li><button id="studentsNav">Students</button></li>
+                <li><button id="subjectsNav">Subjects</button></li>
+                <li><button id="gradesNav">Grades</button></li>
+                <li><button id="accountNav">Account</button></li>
+                <li><button class="logOut" id="logOutNav">Log Out</button></li>
             </ul>
         </nav>
         <main>
             <div class="top">
                 <button class="menu_img" id="navToggleBtn">
-                    <img src="uploads/menu.png">
+                    <img src="uploads/menu.png" id="navImg">
                 </button>
             </div>
             <div class="header">
@@ -52,6 +52,6 @@
 
         <script src="js/components/security.js"></script>
         <script src="js/components/nav.js"></script>
-        <script src="js/ui/homePage.js"></script>
+        <script src="js/pages/homePage.js"></script>
     </body>
 </html>

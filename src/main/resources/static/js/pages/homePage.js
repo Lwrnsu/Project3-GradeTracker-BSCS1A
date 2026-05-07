@@ -1,4 +1,3 @@
-const username = document.getElementById("username");
 const displayName = document.getElementById("name");
 const totalStudents = document.getElementById("totalStudents");
 const totalSubjects = document.getElementById("totalSubjects");
@@ -11,7 +10,6 @@ if (middleName === "null") {
     middleName = "";
 }
 
-username.innerText = sessionStorage.getItem('username');
 displayName.innerText = `Welcome! ${sessionStorage.getItem('lastName')}, ${sessionStorage.getItem('firstName')} ${middleName}`;
 
 document.addEventListener("DOMContentLoaded", async function() {

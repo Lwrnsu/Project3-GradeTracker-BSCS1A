@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.lwrnsu.student_grade_tracker.errors.InvalidCredentialsException;
 import com.lwrnsu.student_grade_tracker.models.LogInRequest;
 import com.lwrnsu.student_grade_tracker.models.Statistics;
+import com.lwrnsu.student_grade_tracker.models.Student;
 import com.lwrnsu.student_grade_tracker.models.User;
 import com.lwrnsu.student_grade_tracker.repository.Database;
 
@@ -34,16 +35,21 @@ public class UserServices {
 
     public void signUp(User user) {
         String hashedPw = encoder.encode(user.getPassword());
-        if (user.getMiddleName() != null && !user.getMiddleName().isEmpty()) {
-            database.signUp(user.getLastName(), user.getFirstName(), user.getMiddleName(), user.getUsername(), hashedPw);
-        } else {
-            database.signUp(user.getLastName(), user.getFirstName(), user.getUsername(), hashedPw);
-        }
+        database.signUp(user.getLastName(), user.getFirstName(), user.getMiddleName(), user.getUsername(), hashedPw);
     }
 
     public Statistics getStatistics(String username) {
         int id = database.getUserID(username);
-        return new Statistics(database.getTotalStudents(id), database.getTotalSubjects(id), database.getTotalPassing(), database.getTotalFailing());
+        return new Statistics(database.getTotalStudents(id), database.getTotalSubjects(id), database.getTotalPassing(id), database.getTotalFailing(id));
+    }
+
+    public void addStudent(Student student) {
+        database.addStudent(student);
+        int id = database.getStudentDBID(student);
+        int year = database.getStudentYearCreation(student);
+        String studentId = String.format("%d%d%04d", year, student.getYearLevel(), id);
+        student.setStudentId(studentId);
+        database.updateStudentID(student);
     }
 }
 

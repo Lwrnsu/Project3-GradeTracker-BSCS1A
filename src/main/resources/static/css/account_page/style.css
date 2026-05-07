@@ -44,7 +44,6 @@ main {
     background-color: rgba(0, 0, 0, 0.2);
 }
 
-
 .header {
     height: 20%;
     display: flex;
@@ -59,38 +58,5 @@ main {
     padding: 12px 0px;
     font-size: 24px;
     color: var(--primary-bg-color);
-}
-
-.content_container {
-    display: flex;
-    justify-content: center;
-    height: 70%;
-}
-
-.content {
-    height: 50%;
-    width: 85%;
-    display: flex;
-    gap: 24px;
-}
-
-.content_cards {
-    border: 1px solid rgba(0, 0, 0, 0.4);
-}
-
-.content_cards p:nth-child(1) {
-    height: 30%;
-    background-color: var(--primary-bg-color);
-    color: white;
-    padding: 8px 12px;
-}
-
-.content_cards p:nth-child(2) {
-    height: 70%;
-    font-size: 36px;
-    padding: 48px 0px;
-    text-align: center;
-    font-weight: 600;
-    background-color: white;
 }
 

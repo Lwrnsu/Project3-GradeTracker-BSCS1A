@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lwrnsu.student_grade_tracker.api.ApiResponse;
 import com.lwrnsu.student_grade_tracker.models.LogInRequest;
+import com.lwrnsu.student_grade_tracker.models.Student;
 import com.lwrnsu.student_grade_tracker.models.User;
 import com.lwrnsu.student_grade_tracker.services.UserServices;
 
@@ -42,5 +43,12 @@ public class UserController {
     @GetMapping("/stats")
     public ApiResponse getStatistics(@RequestParam String username) {
         return new ApiResponse(true, "Data retrieved successfully!", userService.getStatistics(username));
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/add/student")
+    public ApiResponse addStudent(@Valid @RequestBody Student student) {
+        userService.addStudent(student);
+        return new ApiResponse(true, "Student added successfully.", null);
     }
 }

@@ -16,4 +16,9 @@ public class PathController {
         return "home";
     }
 
+    @GetMapping("/account")
+    public String account() {
+        return "account";
+    }
+
 }
