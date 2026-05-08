@@ -6,13 +6,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+import com.lwrnsu.student_grade_tracker.errors.DataAlreadyExistException;
+import com.lwrnsu.student_grade_tracker.errors.DataNotFoundException;
 import com.lwrnsu.student_grade_tracker.errors.DatabaseConnectionException;
-import com.lwrnsu.student_grade_tracker.errors.UserAlreadyExistException;
-import com.lwrnsu.student_grade_tracker.errors.UserNotFoundException;
+import com.lwrnsu.student_grade_tracker.errors.InsertingNullException;
+import com.lwrnsu.student_grade_tracker.models.Student;
+import com.lwrnsu.student_grade_tracker.models.UpdateStudent;
 
 @Repository
 public class Database {
@@ -57,28 +62,9 @@ public class Database {
             if(rs.next()) {
                 return rs.getString("password");
             }
-            throw new UserNotFoundException("User not found.");
+            throw new DataNotFoundException("User not found.");
         } catch (SQLException e) {
             throw new DatabaseConnectionException("Database Connection not found.");
-        }
-    }
-
-    public void signUp(String lName, String fName, String username, String password) {
-        String sql = "INSERT INTO tbl_users(username, password, last_name, first_name) VALUES (?, ?, ?, ?);";
-        try (
-            Connection conn = getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-        ) {
-            pstmt.setString(1, username);
-            pstmt.setString(2, password);
-            pstmt.setString(3, lName);
-            pstmt.setString(4, fName);
-            pstmt.executeUpdate();
-
-        } catch (SQLIntegrityConstraintViolationException e) {
-            throw new UserAlreadyExistException("Username already exist.");
-        } catch (SQLException e) {
-            throw new DatabaseConnectionException("Database not found.");
         }
     }
 
@@ -96,7 +82,7 @@ public class Database {
             pstmt.executeUpdate();
 
         } catch (SQLIntegrityConstraintViolationException e) {
-            throw new UserAlreadyExistException("Username already exist.");
+            throw new DataAlreadyExistException("Username already exist.");
         } catch (SQLException e) {
             throw new DatabaseConnectionException("Database not found.");
         }
@@ -113,7 +99,7 @@ public class Database {
             if(rs.next()) {
                 return rs.getString("last_name");
             }
-            throw new UserNotFoundException("User not found.");
+            throw new DataNotFoundException("User not found.");
         } catch (SQLException e) {
             throw new DatabaseConnectionException("Database not found.");
         }
@@ -130,7 +116,7 @@ public class Database {
             if (rs.next()) {
                 return rs.getString("first_name");
             }
-            throw new UserNotFoundException("User not found.");
+            throw new DataNotFoundException("User not found.");
         } catch (SQLException e) {
             throw new DatabaseConnectionException("Database not found.");
         }
@@ -147,7 +133,7 @@ public class Database {
             if (rs.next()) {
                 return rs.getString("middle_name");
             }
-            throw new UserNotFoundException("User not found.");
+            throw new DataNotFoundException("User not found.");
         } catch (SQLException e) {
             throw new DatabaseConnectionException("Database not found.");
         }
@@ -161,18 +147,17 @@ public class Database {
         ) {
             pstmt.setString(1, username);
             ResultSet rs = pstmt.executeQuery();
-            
             if(rs.next()) {
                 return rs.getInt("id");
             }
-            throw new UserNotFoundException("User Not Found.");
+            throw new DataNotFoundException("User Not Found.");
         } catch (SQLException e) {
             throw new DatabaseConnectionException("Database Connection not found.");
         }
     }
 
     public int getTotalStudents(int id) {
-        String sql = "SELECT COUNT(*) FROM tbl_students WHERE fk_user_id=?;";
+        String sql = "SELECT COUNT(*) AS total FROM tbl_students WHERE fk_user_id=?;";
         try (
             Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -180,16 +165,16 @@ public class Database {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return rs.getInt("COUNT(*)");
+                return rs.getInt("total");
             }
-            throw new UserNotFoundException("User not found.");
+            throw new DataNotFoundException("User not found.");
         } catch (SQLException e) {
             throw new DatabaseConnectionException("Database not found.");
         }
     }
     
     public int getTotalSubjects(int id) {
-        String sql = "SELECT COUNT(*) FROM tbl_subjects WHERE fk_user_id=?;";
+        String sql = "SELECT COUNT(*) AS total FROM tbl_subjects WHERE fk_user_id=?;";
         try (
             Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -197,41 +182,186 @@ public class Database {
             pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return rs.getInt("COUNT(*)");
+                return rs.getInt("total");
             }
-            throw new UserNotFoundException("User not found.");
+            throw new DataNotFoundException("User not found.");
         } catch (SQLException e) {
             throw new DatabaseConnectionException("Database not found.");
         }
     }
 
-    public int getTotalPassing() {
-        String sql = "SELECT COUNT(*) FROM tbl_grades WHERE grade >= 75;";
+    public int getTotalPassing(int id) {
+        String sql = "SELECT COUNT(*) AS total FROM tbl_grades " +
+        "JOIN tbl_enrolled ON tbl_enrolled.id = tbl_grades.fk_enrolled_id " +
+        "JOIN tbl_students ON tbl_students.id = tbl_enrolled.fk_student_id " +
+        "WHERE tbl_students.fk_user_id = ? AND tbl_grades.grade >= 75;";
         try (
             Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
         ) {
+            pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return rs.getInt("COUNT(*)");
+                return rs.getInt("total");
             }
-            throw new UserNotFoundException("User not found.");
+            throw new DataNotFoundException("User not found.");
         } catch (SQLException e) {
             throw new DatabaseConnectionException("Database not found.");
         }
     }
 
-    public int getTotalFailing() {
-        String sql = "SELECT COUNT(*) FROM tbl_grades WHERE grade < 75;";
+    public int getTotalFailing(int id) {
+        String sql = "SELECT COUNT(*) AS total FROM tbl_grades " +
+        "JOIN tbl_enrolled ON tbl_enrolled.id = tbl_grades.fk_enrolled_id " +
+        "JOIN tbl_students ON tbl_students.id = tbl_enrolled.fk_student_id " +
+        "WHERE tbl_students.fk_user_id = ? AND tbl_grades.grade < 75;";
         try (
             Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
         ) {
+            pstmt.setInt(1, id);
             ResultSet rs = pstmt.executeQuery();
             if (rs.next()) {
-                return rs.getInt("COUNT(*)");
+                return rs.getInt("total");
             }
-            throw new UserNotFoundException("User not found.");
+            throw new DataNotFoundException("User not found.");
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public void addStudent(Student student) {
+        String sql = "INSERT INTO tbl_students(last_name, first_name, middle_name, year_level, fk_user_id) VALUES (?, ?, ?, ?, ?);";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setString(1, student.getLastName());
+            pstmt.setString(2, student.getFirstName());
+            pstmt.setString(3, student.getMiddleName());
+            pstmt.setInt(4, student.getYearLevel());
+            pstmt.setInt(5, getUserID(student.getUsername()));
+            pstmt.executeUpdate();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new DataAlreadyExistException("Student Already Exist");
+        } catch (SQLException e) {
+            if (e.getErrorCode() == 0 || e.getErrorCode() == 1049) {
+                throw new DatabaseConnectionException("Database not found.");
+            }
+            if (e.getErrorCode() == 1048) {
+                throw new InsertingNullException("Cannot insert a null in a not null column.");
+            }
+        }
+    }
+
+    public int getStudentDBID(Student student) {
+        String sql = "SELECT id FROM tbl_students WHERE student_id IS NULL AND last_name=? AND first_name=? AND (middle_name IS NULL OR middle_name = ?) AND year_level = ? AND fk_user_id = ?;";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setString(1, student.getLastName());
+            pstmt.setString(2, student.getFirstName());
+            pstmt.setString(3, student.getMiddleName());
+            pstmt.setInt(4, student.getYearLevel());
+            pstmt.setInt(5, getUserID(student.getUsername()));
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next()) {
+                return rs.getInt("id");
+            }
+            throw new DataNotFoundException("Error 1");
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public int getStudentYearCreation(Student student) {
+        String sql = "SELECT YEAR(created_at) AS year FROM tbl_students WHERE fk_user_id=? AND id=?;";
+        try(
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setInt(1, getUserID(student.getUsername()));
+            pstmt.setInt(2, getStudentDBID(student));
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("year");
+            }
+            throw new DataNotFoundException("Error 2");
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public void updateStudentID(Student student) {
+        String sql = "UPDATE tbl_students SET student_id = ? WHERE id = ?;";
+        try(
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setString(1, student.getStudentId());
+            pstmt.setInt(2, getStudentDBID(student));
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public void deleteStudent(String studentID) {
+        String sql = "DELETE FROM tbl_students WHERE student_id = ?;";
+        try(
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setString(1, studentID);
+            int status = pstmt.executeUpdate();
+            if (status == 0) {
+                throw new DataNotFoundException("Student not found.");
+            }
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public List<Student> getStudents(String username) {
+        String sql = "SELECT s.student_id, s.last_name, s.first_name, s.middle_name, s.year_level FROM tbl_students s WHERE s.fk_user_id = ? ORDER BY s.last_name, s.first_name, s.middle_name ASC;";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setInt(1, getUserID(username));
+            ResultSet rs = pstmt.executeQuery();
+            List<Student> list = new ArrayList<>();
+            while(rs.next()) {
+                Student data = new Student();
+                data.setStudentId(rs.getString("student_id"));
+                data.setLastName(rs.getString("last_name"));
+                data.setFirstName(rs.getString("first_name"));
+                data.setMiddleName(rs.getString("middle_name"));
+                data.setYearLevel(rs.getInt("year_level"));
+                list.add(data);
+            }
+            return list;
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public void updateStudent(UpdateStudent updateStudent) {
+        String sql = "UPDATE tbl_students SET last_name = ?, first_name = ?, middle_name = ? " +
+        "WHERE last_name = ? AND first_name = ? AND middle_name = ? AND fk_user_id = ?;";
+        try(
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setString(1, updateStudent.getNewLastName());
+            pstmt.setString(2, updateStudent.getNewFirstName());
+            pstmt.setString(3, updateStudent.getNewMiddleName());
+            pstmt.setString(4, updateStudent.getOldLastName());
+            pstmt.setString(5, updateStudent.getOldFirstName());
+            pstmt.setString(6, updateStudent.getOldMiddleName());
+            pstmt.setInt(7, getUserID(updateStudent.getUsername()));
+            pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new DatabaseConnectionException("Database not found.");
         }

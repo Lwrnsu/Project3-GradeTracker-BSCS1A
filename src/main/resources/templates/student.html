@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Student Grade Tracker</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/student_page/style.css">
+        <link rel="stylesheet" href="css/components/nav.css">
+    </head>
+    <body>
+        <nav id="nav">
+            <img src="uploads/gc_logo.png" alt="Gordon College Logo">
+            <p id="username">N/A</p>
+            <ul>
+                <li><button id="homeNav">Home</button></li>
+                <li><button class="active" id="studentsNav">Students</button></li>
+                <li><button id="subjectsNav">Subjects</button></li>
+                <li><button id="gradesNav">Grades</button></li>
+                <li><button id="accountNav">Account</button></li>
+                <li><button class="logOut" id="logOutNav">Log Out</button></li>
+            </ul>
+        </nav>
+        <main>
+            <div class="top">
+                <button class="menu_img" id="navToggleBtn">
+                    <img src="uploads/menu.png" id="navImg">
+                </button>
+            </div>
+            <div class="header">
+                <h4 id="name">Student Management System.</h4>
+            </div>
+            <div class="content_container">
+                <form id="addStudentTest">
+                    <label for="lastName">last name: </label>
+                    <input
+                        type="text"
+                        name="lastName"
+                        id="lastName"
+                        required
+                    >
+                    <label for="firstName">first name: </label>
+                    <input
+                        type="text"
+                        name="firstName"
+                        id="firstName"
+                        required
+                    >
+                    <label for="middleName">middle name: </label>
+                    <input
+                        type="text"
+                        name="middleName"
+                        id="middleName"
+                    >
+                    <label for="yearLevel">year level: </label>
+                    <input
+                        type="number"
+                        name="yearLevel"
+                        id="yearLevel"
+                        required
+                    >
+                    <button type="submit">add student</button>
+                </form>
+                <div class="displayContainer" id="displayStudents"></div>
+            </div>
+        </main>
+
+        <div class="updateStudentModal hideModal" id="modal">
+            <div class="modal_bg"></div>
+            <div class="modal_content"></div>
+        </div>
+
+        <script src="js/components/security.js"></script>
+        <script src="js/components/nav.js"></script>
+        <script src="js/pages/studentPage.js"></script>
+    </body>
+</html>
