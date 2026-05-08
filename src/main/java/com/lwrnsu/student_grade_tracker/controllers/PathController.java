@@ -17,8 +17,22 @@ public class PathController {
     }
 
     @GetMapping("/student")
-    public String account() {
+    public String student() {
         return "student";
     }
 
+    @GetMapping("/subject")
+    public String subject() {
+        return "subject";
+    }
+
+    @GetMapping("/grades")
+    public String grades() {
+        return "grades";
+    }
+
+    @GetMapping("/account")
+    public String account() {
+        return "account";
+    }
 }

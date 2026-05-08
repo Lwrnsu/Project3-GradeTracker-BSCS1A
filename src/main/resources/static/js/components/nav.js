@@ -12,6 +12,8 @@ function toggleNav() {
 function switchTabs(tabName) {
     if (tabName === "home") window.location.href = "/home";
     if (tabName === "student") window.location.href = "/student";
+    if (tabName === "subject") window.location.href = "/subject";
+    if (tabName === "grades") window.location.href = "/grades";
     if (tabName === "account") window.location.href = "/account";
 }
 
@@ -19,5 +21,7 @@ document.addEventListener('click', (event) => {
     if(event.target.matches("#navToggleBtn") || event.target.matches("#navImg")) toggleNav();
     if(event.target.matches("#homeNav")) switchTabs("home");
     if(event.target.matches("#studentsNav")) switchTabs("student");
+    if(event.target.matches("#subjectsNav")) switchTabs("subject");
+    if(event.target.matches("#gradesNav")) switchTabs("grades");
     if(event.target.matches("#accountNav")) switchTabs("account");
 });
