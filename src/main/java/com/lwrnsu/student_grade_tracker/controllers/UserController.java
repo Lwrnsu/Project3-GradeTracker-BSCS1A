@@ -2,8 +2,10 @@ package com.lwrnsu.student_grade_tracker.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lwrnsu.student_grade_tracker.api.ApiResponse;
 import com.lwrnsu.student_grade_tracker.models.LogInRequest;
 import com.lwrnsu.student_grade_tracker.models.Student;
+import com.lwrnsu.student_grade_tracker.models.UpdateStudent;
 import com.lwrnsu.student_grade_tracker.models.User;
 import com.lwrnsu.student_grade_tracker.services.UserServices;
 
@@ -50,5 +53,25 @@ public class UserController {
     public ApiResponse addStudent(@Valid @RequestBody Student student) {
         userService.addStudent(student);
         return new ApiResponse(true, "Student added successfully.", null);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/get/student")
+    public ApiResponse getStudent(@RequestParam String username) {
+        return new ApiResponse(true, "Student/s successfully retrieved.", userService.getStudent(username));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/update/student")
+    public ApiResponse updateStudent(@Valid @RequestBody UpdateStudent updateStudent) {
+        userService.updateStudent(updateStudent);
+        return new ApiResponse(true, "Student successfully updated.", null);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/delete/student")
+    public ApiResponse deleteStudent(@RequestParam String studentID) {
+        userService.deleteStudent(studentID);
+        return new ApiResponse(true, "Student deleted successfully.", null);
     }
 }

@@ -1,5 +1,7 @@
 package com.lwrnsu.student_grade_tracker.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -8,6 +10,7 @@ import com.lwrnsu.student_grade_tracker.errors.InvalidCredentialsException;
 import com.lwrnsu.student_grade_tracker.models.LogInRequest;
 import com.lwrnsu.student_grade_tracker.models.Statistics;
 import com.lwrnsu.student_grade_tracker.models.Student;
+import com.lwrnsu.student_grade_tracker.models.UpdateStudent;
 import com.lwrnsu.student_grade_tracker.models.User;
 import com.lwrnsu.student_grade_tracker.repository.Database;
 
@@ -50,6 +53,18 @@ public class UserServices {
         String studentId = String.format("%d%d%04d", year, student.getYearLevel(), id);
         student.setStudentId(studentId);
         database.updateStudentID(student);
+    }
+
+    public List<Student> getStudent(String username) {
+        return database.getStudents(username);
+    }
+
+    public void updateStudent(UpdateStudent updateStudent) {
+        database.updateStudent(updateStudent);
+    }
+
+    public void deleteStudent(String studentID) {
+        database.deleteStudent(studentID);
     }
 }
 

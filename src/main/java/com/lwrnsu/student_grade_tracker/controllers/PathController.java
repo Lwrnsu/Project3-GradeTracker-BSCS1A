@@ -16,9 +16,9 @@ public class PathController {
         return "home";
     }
 
-    @GetMapping("/account")
+    @GetMapping("/student")
     public String account() {
-        return "account";
+        return "student";
     }
 
 }

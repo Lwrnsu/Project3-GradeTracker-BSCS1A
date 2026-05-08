@@ -17,8 +17,6 @@ form.addEventListener('submit', async function(event) {
 
     const result = await api.json();
 
-    console.log(result.message + " " + api.status);
-
     if (result.success) {
         sessionStorage.setItem('isLoggedIn', 'true');
         sessionStorage.setItem('username', result.data.username);

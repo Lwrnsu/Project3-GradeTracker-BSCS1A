@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -15,6 +17,7 @@ import com.lwrnsu.student_grade_tracker.errors.DataNotFoundException;
 import com.lwrnsu.student_grade_tracker.errors.DatabaseConnectionException;
 import com.lwrnsu.student_grade_tracker.errors.InsertingNullException;
 import com.lwrnsu.student_grade_tracker.models.Student;
+import com.lwrnsu.student_grade_tracker.models.UpdateStudent;
 
 @Repository
 public class Database {
@@ -242,7 +245,6 @@ public class Database {
         } catch (SQLIntegrityConstraintViolationException e) {
             throw new DataAlreadyExistException("Student Already Exist");
         } catch (SQLException e) {
-            e.printStackTrace();
             if (e.getErrorCode() == 0 || e.getErrorCode() == 1049) {
                 throw new DatabaseConnectionException("Database not found.");
             }
@@ -269,7 +271,6 @@ public class Database {
             }
             throw new DataNotFoundException("Error 1");
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new DatabaseConnectionException("Database not found.");
         }
     }
@@ -288,23 +289,81 @@ public class Database {
             }
             throw new DataNotFoundException("Error 2");
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new DatabaseConnectionException("Database not found.");
         }
     }
 
     public void updateStudentID(Student student) {
-        String sql = "UPDATE tbl_students SET student_id = ?;";
+        String sql = "UPDATE tbl_students SET student_id = ? WHERE id = ?;";
         try(
             Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
         ) {
             pstmt.setString(1, student.getStudentId());
+            pstmt.setInt(2, getStudentDBID(student));
             pstmt.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new DatabaseConnectionException("Database not found.");
         }
     }
 
+    public void deleteStudent(String studentID) {
+        String sql = "DELETE FROM tbl_students WHERE student_id = ?;";
+        try(
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setString(1, studentID);
+            int status = pstmt.executeUpdate();
+            if (status == 0) {
+                throw new DataNotFoundException("Student not found.");
+            }
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public List<Student> getStudents(String username) {
+        String sql = "SELECT s.student_id, s.last_name, s.first_name, s.middle_name, s.year_level FROM tbl_students s WHERE s.fk_user_id = ? ORDER BY s.last_name, s.first_name, s.middle_name ASC;";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setInt(1, getUserID(username));
+            ResultSet rs = pstmt.executeQuery();
+            List<Student> list = new ArrayList<>();
+            while(rs.next()) {
+                Student data = new Student();
+                data.setStudentId(rs.getString("student_id"));
+                data.setLastName(rs.getString("last_name"));
+                data.setFirstName(rs.getString("first_name"));
+                data.setMiddleName(rs.getString("middle_name"));
+                data.setYearLevel(rs.getInt("year_level"));
+                list.add(data);
+            }
+            return list;
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public void updateStudent(UpdateStudent updateStudent) {
+        String sql = "UPDATE tbl_students SET last_name = ?, first_name = ?, middle_name = ? " +
+        "WHERE last_name = ? AND first_name = ? AND middle_name = ? AND fk_user_id = ?;";
+        try(
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setString(1, updateStudent.getNewLastName());
+            pstmt.setString(2, updateStudent.getNewFirstName());
+            pstmt.setString(3, updateStudent.getNewMiddleName());
+            pstmt.setString(4, updateStudent.getOldLastName());
+            pstmt.setString(5, updateStudent.getOldFirstName());
+            pstmt.setString(6, updateStudent.getOldMiddleName());
+            pstmt.setInt(7, getUserID(updateStudent.getUsername()));
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
 }
