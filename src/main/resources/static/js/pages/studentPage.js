@@ -27,8 +27,8 @@ addStudentForm.addEventListener('submit', async function(event) {
     }
 });
 
-function displayStudents(data) {
-    data.forEach((e) => {
+function displayStudents() {
+    studentData.forEach((e) => {
         const student = document.createElement("div");
         student.classList.add("testRow");
         student.dataset.id = e.studentId;
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         result.data.forEach((e) => {
             studentData.push(e);
         });
-        displayStudents(studentData);
+        displayStudents();
     } else if (!result.success) {
         console.log(result.message);
     }

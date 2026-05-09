@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Student Grade Tracker</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/css/subjectEnrolledPage/style.css">
+        <link rel="stylesheet" href="/css/components/nav.css">
+    </head>
+    <body>
+        <nav id="nav">
+            <img src="/uploads/gc_logo.png" alt="Gordon College Logo">
+            <p id="username">N/A</p>
+            <ul>
+                <li><button id="homeNav">Home</button></li>
+                <li><button id="studentsNav">Students</button></li>
+                <li><button class="active" id="subjectsNav">Subjects</button></li>
+                <li><button id="gradesNav">Grades</button></li>
+                <li><button id="accountNav">Account</button></li>
+                <li><button class="logOut" id="logOutNav">Log Out</button></li>
+            </ul>
+        </nav>
+        <main>
+            <div class="top">
+                <button class="menu_img" id="navToggleBtn">
+                    <img src="/uploads/menu.png" id="navImg">
+                </button>
+            </div>
+            <div class="header">
+                <h4 id="name"></h4>
+            </div>
+            <div class="content_container">
+                <div id="content_header">
+                    <form id="updateSubjectForm">
+                        <label for="subjectCode">Subject Code: </label>
+                        <input
+                            type="text"
+                            name="subjectCode"
+                            id="subjectCode"
+                            required
+                        >
+                        <label for="subjectName">Subject Code: </label>
+                        <input
+                                type="text"
+                                name="subjectName"
+                                id="subjectName"
+                                required
+                        >
+                        <button id="updateSubjectBtn">Update Subject</button>
+                    </form>
+                    <button id="subjectDeleteBtn">Delete Subject</button>
+                    <form id="enrollStudentForm">
+                        <label for="studentID">Student ID: </label>
+                        <input
+                            type="text"
+                            name="studentID"
+                            id="studentID"
+                            required
+                        >
+                        <button type="submit">Enroll</button>
+                    </form>
+                    <div id="displayEnrolledStudents"></div>
+                </div>
+            </div>
+        </main>
+        <script src="/js/components/security.js"></script>
+        <script src="/js/components/nav.js"></script>
+        <script src="/js/pages/subjectEnrolledPage.js"></script>
+    </body>
+</html>

@@ -9,6 +9,7 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.lwrnsu.student_grade_tracker.models.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -16,8 +17,8 @@ import com.lwrnsu.student_grade_tracker.errors.DataAlreadyExistException;
 import com.lwrnsu.student_grade_tracker.errors.DataNotFoundException;
 import com.lwrnsu.student_grade_tracker.errors.DatabaseConnectionException;
 import com.lwrnsu.student_grade_tracker.errors.InsertingNullException;
-import com.lwrnsu.student_grade_tracker.models.Student;
-import com.lwrnsu.student_grade_tracker.models.UpdateStudent;
+
+import javax.xml.transform.Result;
 
 @Repository
 public class Database {
@@ -363,6 +364,195 @@ public class Database {
             pstmt.setInt(7, getUserID(updateStudent.getUsername()));
             pstmt.executeUpdate();
         } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public void addSubject(Subject subject) {
+        String sql = "INSERT INTO tbl_subjects(subject_code, subject_name, fk_user_id) VALUES (?, ?, ?);";
+        try (
+                Connection conn = getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setString(1, subject.getSubjectCode());
+            pstmt.setString(2, subject.getSubjectName());
+            pstmt.setInt(3, getUserID(subject.getUserData()));
+            pstmt.executeUpdate();
+        } catch (SQLIntegrityConstraintViolationException e) {
+          throw new DataAlreadyExistException("Subject code already exists.");
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public List<Subject> getSubject(String username) {
+        String sql = "SELECT subject_code, subject_name FROM tbl_subjects WHERE fk_user_id = ?;";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setInt(1, getUserID(username));
+            ResultSet rs = pstmt.executeQuery();
+            List<Subject> data = new ArrayList<>();
+            while(rs.next()) {
+                Subject subject = new Subject();
+                subject.setSubjectCode(rs.getString("subject_code"));
+                subject.setSubjectName(rs.getString("subject_name"));
+                data.add(subject);
+            }
+            return data;
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public String getSubjectName(String subjectCode, String userData) {
+        String sql = "SELECT subject_name FROM tbl_subjects WHERE subject_code = ? AND fk_user_id = ?;";
+        try(
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setString(1, subjectCode);
+            pstmt.setInt(2, getUserID(userData));
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("subject_name");
+            }
+            throw new DataNotFoundException("Subject not exists.");
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public SubjectEnrolled getSubjectEnrolled(String userData, String subjectCode) {
+        String sql = "SELECT sub.subject_code, sub.subject_name, stud.student_id, stud.last_name, stud.first_name, stud.middle_name, stud.year_level " +
+                "FROM tbl_enrolled AS enr " +
+                "JOIN tbl_subjects AS sub ON sub.id = enr.fk_subject_id " +
+                "JOIN tbl_students AS stud ON stud.id = enr.fk_student_id " +
+                "WHERE sub.subject_code = ? AND sub.fk_user_id = ? AND stud.fk_user_id = ?;";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            int userID = getUserID(userData);
+            pstmt.setString(1, subjectCode);
+            pstmt.setInt(2, userID);
+            pstmt.setInt(3, userID);
+            ResultSet rs = pstmt.executeQuery();
+            List<Student> studentEnrolledList = new ArrayList<>();
+            while(rs.next()) {
+                Student student = new Student();
+                student.setStudentId(rs.getString("student_id"));
+                student.setLastName(rs.getString("last_name"));
+                student.setFirstName(rs.getString("first_name"));
+                student.setMiddleName(rs.getString("middle_name"));
+                student.setYearLevel(rs.getInt("year_level"));
+                studentEnrolledList.add(student);
+            }
+            return new SubjectEnrolled(subjectCode, getSubjectName(subjectCode, userData), studentEnrolledList);
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public int getStudentDBID(String studentID, String userData) {
+        String sql = "SELECT id FROM tbl_students WHERE student_id = ? AND fk_user_id = ?;";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setString(1, studentID);
+            pstmt.setInt(2, getUserID(userData));
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+            throw new DataNotFoundException("Student not found.");
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public int getSubjectID(String subjectCode, String userData) {
+        String sql = "SELECT id FROM tbl_subjects WHERE subject_code = ? AND fk_user_id = ?;";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setString(1, subjectCode);
+            pstmt.setInt(2, getUserID(userData));
+            ResultSet rs = pstmt.executeQuery();
+            if(rs.next()) {
+                return rs.getInt("id");
+            }
+            throw new DataNotFoundException("Subject not found.");
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public void enrollStudent(EnrollStudent enrollStudent) {
+        String sql = "INSERT INTO tbl_enrolled(fk_student_id, fk_subject_id) VALUES (?,?);";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setInt(1, getStudentDBID(enrollStudent.getStudentID(), enrollStudent.getUserData()));
+            pstmt.setInt(2, getSubjectID(enrollStudent.getSubjectCode(), enrollStudent.getUserData()));
+            pstmt.executeUpdate();
+        } catch (SQLIntegrityConstraintViolationException e) {
+            throw new DataAlreadyExistException("Student already exists.");
+        } catch (SQLException e) {
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public void deleteEnrolledStudent(String studentID, String subjectCode, String userData) {
+        String sql = "DELETE enr FROM tbl_enrolled AS enr " +
+                "WHERE enr.fk_student_id = ? AND enr.fk_subject_id = ?;";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setInt(1, getStudentDBID(studentID, userData));
+            pstmt.setInt(2, getSubjectID(subjectCode, userData));
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public void updateSubject(UpdateSubject updateSubject) {
+        String sql = "UPDATE tbl_subjects SET subject_code = ?, subject_name = ? " +
+                "WHERE subject_code = ? AND subject_name = ? AND fk_user_id = ?;";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setString(1, updateSubject.getNewSubjectCode());
+            pstmt.setString(2, updateSubject.getNewSubjectName());
+            pstmt.setString(3, updateSubject.getOldSubjectCode());
+            pstmt.setString(4, updateSubject.getOldSubjectName());
+            pstmt.setInt(5, getUserID(updateSubject.getUserData()));
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public void deleteSubject(String userData, String subjectCode) {
+        String sql = "DELETE FROM tbl_subjects WHERE subject_code = ? AND fk_user_id = ?;";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setString(1, subjectCode);
+            pstmt.setInt(2, getUserID(userData));
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
             throw new DatabaseConnectionException("Database not found.");
         }
     }
