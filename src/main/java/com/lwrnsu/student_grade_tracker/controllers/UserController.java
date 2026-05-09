@@ -1,22 +1,11 @@
 package com.lwrnsu.student_grade_tracker.controllers;
 
+import com.lwrnsu.student_grade_tracker.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.lwrnsu.student_grade_tracker.api.ApiResponse;
-import com.lwrnsu.student_grade_tracker.models.LogInRequest;
-import com.lwrnsu.student_grade_tracker.models.Student;
-import com.lwrnsu.student_grade_tracker.models.UpdateStudent;
-import com.lwrnsu.student_grade_tracker.models.User;
 import com.lwrnsu.student_grade_tracker.services.UserServices;
 
 import jakarta.validation.Valid;
@@ -74,4 +63,52 @@ public class UserController {
         userService.deleteStudent(studentID);
         return new ApiResponse(true, "Student deleted successfully.", null);
     }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/add/subject")
+    public ApiResponse addSubject(@Valid @RequestBody Subject subject) {
+        userService.addSubject(subject);
+        return new ApiResponse(true, "Subject added successfully.", null);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/get/subject")
+    public ApiResponse getSubject(@RequestParam String username) {
+        return new ApiResponse(true, "Subject/s successfully retrieved.", userService.getSubject(username));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/get/subject/{userData}/{subjectCode}")
+    public ApiResponse getSubjectEnrolled(@PathVariable String userData, @PathVariable String subjectCode) {
+        return new ApiResponse(true, "Subject data successfully retrieved.", userService.getSubjectEnrolled(userData, subjectCode));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/add/subject/student")
+    public ApiResponse enrollStudent(@Valid @RequestBody EnrollStudent enrollStudent) {
+        userService.enrollStudent(enrollStudent);
+        return new ApiResponse(true, "Student successfully enrolled.", null);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/delete/subject/student")
+    public ApiResponse deleteEnrolledStudent(@RequestParam String studentID, @RequestParam String subjectCode, @RequestParam String userData) {
+        userService.deleteEnrolledStudent(studentID, subjectCode, userData);
+        return new ApiResponse(true, "Student successfully deleted from the subject", null);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/update/subject")
+    public ApiResponse updateSubject(@Valid @RequestBody UpdateSubject updateSubject) {
+        userService.updateSubject(updateSubject);
+        return new ApiResponse(true, "Subject updated successfully", null);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/delete/subject")
+    public ApiResponse deleteSubject(@RequestParam String userData, @RequestParam String subjectCode) {
+        userService.deleteSubject(userData, subjectCode);
+        return new ApiResponse(true, "Subject Deleted Successfully", null);
+    }
+
 }

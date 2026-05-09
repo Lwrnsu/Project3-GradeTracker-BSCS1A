@@ -2,16 +2,12 @@ package com.lwrnsu.student_grade_tracker.services;
 
 import java.util.List;
 
+import com.lwrnsu.student_grade_tracker.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.lwrnsu.student_grade_tracker.errors.InvalidCredentialsException;
-import com.lwrnsu.student_grade_tracker.models.LogInRequest;
-import com.lwrnsu.student_grade_tracker.models.Statistics;
-import com.lwrnsu.student_grade_tracker.models.Student;
-import com.lwrnsu.student_grade_tracker.models.UpdateStudent;
-import com.lwrnsu.student_grade_tracker.models.User;
 import com.lwrnsu.student_grade_tracker.repository.Database;
 
 @Service
@@ -65,6 +61,34 @@ public class UserServices {
 
     public void deleteStudent(String studentID) {
         database.deleteStudent(studentID);
+    }
+
+    public void addSubject(Subject subject) {
+        database.addSubject(subject);
+    }
+
+    public List<Subject> getSubject(String username) {
+        return database.getSubject(username);
+    }
+
+    public SubjectEnrolled getSubjectEnrolled(String userData, String subjectCode) {
+        return database.getSubjectEnrolled(userData, subjectCode);
+    }
+
+    public void enrollStudent(EnrollStudent enrollStudent) {
+        database.enrollStudent(enrollStudent);
+    }
+
+    public void deleteEnrolledStudent(String studentID, String subjectCode, String userData) {
+        database.deleteEnrolledStudent(studentID, subjectCode, userData);
+    }
+
+    public void updateSubject(UpdateSubject updateSubject) {
+        database.updateSubject(updateSubject);
+    }
+
+    public void deleteSubject(String userData, String subjectCode) {
+        database.deleteSubject(userData, subjectCode);
     }
 }
 

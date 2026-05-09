@@ -30,5 +30,7 @@ public class Student {
     @Max(value=4, message="Must no exceed 4th Year.")
     private int yearLevel;
 
+    @NotNull(message = "User data not found.")
+    @NotBlank(message = "What the hell bro???")
     private String username;
 }
