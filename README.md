@@ -25,7 +25,7 @@
 - Automated grade calculation & pass/fail logic ​
 - Student-subject data management & relationship mapping ​
 - System testing, troubleshooting & optimization ​
-- How we worked as a team to build this project.**
+- How we worked as a team to build this project.
 
 📫 How to reach us **ritchenfulgencio@gmail.com**
 
