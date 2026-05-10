@@ -40,4 +40,9 @@ public class PathController {
     public String subjectEnrolled() {
         return "subjectEnrolled";
     }
+
+    @GetMapping("/grades/{userData}/{subjectCode}")
+    public String subjectGrades() {
+        return "subjectGrades";
+    }
 }

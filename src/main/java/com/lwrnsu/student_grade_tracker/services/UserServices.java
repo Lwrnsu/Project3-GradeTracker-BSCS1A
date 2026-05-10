@@ -90,5 +90,21 @@ public class UserServices {
     public void deleteSubject(String userData, String subjectCode) {
         database.deleteSubject(userData, subjectCode);
     }
+
+    public void addStudentGradeList(EnrollStudent enrollStudent) {
+        database.addStudentGradeList(enrollStudent);
+    }
+
+    public SubjectGrade getStudentGradeList(String userData, String subjectCode) {
+        return database.getStudentGradeList(userData, subjectCode);
+    }
+
+    public void deleteStudentGradeList(String studentID, String userData, String subjectCode) {
+        database.deleteStudentGradeList(studentID, userData, subjectCode);
+    }
+
+    public void updateStudentGrade(List<StudentGrade> array) {
+        database.updateStudentGrade(array);
+    }
 }
 
