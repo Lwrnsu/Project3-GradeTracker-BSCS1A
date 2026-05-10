@@ -85,7 +85,7 @@ displayEnrolledStudents.addEventListener("click", async function(event) {
             userData: sessionStorage.getItem("username")
         }
 
-        const api = await fetch(`/user/delete/subject/student?studentID=${data.studentID}&subjectCode=${data.subjectCode}&userData=${data.userData}`, {
+        const api = await fetch(`/user/delete/subject/student?studentID=${data.studentID}&subjectCode=${urlSubjectCode}&userData=${data.userData}`, {
             method: "DELETE"
         });
 
@@ -97,7 +97,6 @@ displayEnrolledStudents.addEventListener("click", async function(event) {
         } else if (!result.success) {
             alert(result.message);
         }
-
     }
 });
 
@@ -132,6 +131,7 @@ deleteSubjectBtn.addEventListener("click", async function() {
     const api = await fetch(`/user/delete/subject?userData=${sessionStorage.getItem("username")}&subjectCode=${urlSubjectCode}`, {
         method: "DELETE"
     });
+
     const result = await api.json();
 
     if(result.success) {

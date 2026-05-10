@@ -1,5 +1,6 @@
 package com.lwrnsu.student_grade_tracker.repository;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -205,7 +206,7 @@ public class Database {
             if (rs.next()) {
                 return rs.getInt("total");
             }
-            throw new DataNotFoundException("User not found.");
+            return -1;
         } catch (SQLException e) {
             throw new DatabaseConnectionException("Database not found.");
         }
@@ -225,7 +226,7 @@ public class Database {
             if (rs.next()) {
                 return rs.getInt("total");
             }
-            throw new DataNotFoundException("User not found.");
+            return -1;
         } catch (SQLException e) {
             throw new DatabaseConnectionException("Database not found.");
         }
@@ -551,6 +552,114 @@ public class Database {
             pstmt.setString(1, subjectCode);
             pstmt.setInt(2, getUserID(userData));
             pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public int getEnrolledID(String studentID, String userData, String subjectCode) {
+        String sql = "SELECT enr.id FROM tbl_enrolled AS enr " +
+                "JOIN tbl_students AS stud ON stud.id = enr.fk_student_id " +
+                "JOIN tbl_subjects AS sub ON sub.id = enr.fk_subject_id " +
+                "WHERE stud.student_id = ? AND sub.subject_code = ? " +
+                "AND stud.fk_user_id = ? AND sub.fk_user_id = ?;";
+        try (
+                Connection conn = getConnection();
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            int id = getUserID(userData);
+            pstmt.setString(1, studentID);
+            pstmt.setString(2, subjectCode);
+            pstmt.setInt(3, id);
+            pstmt.setInt(4, id);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+            throw new DataNotFoundException("Enrolled Student not found.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public void addStudentGradeList(EnrollStudent enrollStudent) {
+        String sql = "INSERT INTO tbl_grades(fk_enrolled_id) VALUES (?);";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setInt(1, getEnrolledID(enrollStudent.getStudentID(), enrollStudent.getUserData(), enrollStudent.getSubjectCode()));
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public SubjectGrade getStudentGradeList(String userData, String subjectCode) {
+        String sql = "SELECT stud.student_id, stud.last_name, stud.first_name, stud.middle_name, grd.grade FROM tbl_grades AS grd " +
+                "JOIN tbl_enrolled AS enr ON enr.id = grd.fk_enrolled_id " +
+                "JOIN tbl_students AS stud ON stud.id = enr.fk_student_id " +
+                "JOIN tbl_subjects AS sub ON sub.id = enr.fk_subject_id " +
+                "WHERE stud.fk_user_id = ? AND sub.subject_code = ? AND sub.fk_user_id = ?;";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            int userID = getUserID(userData);
+            pstmt.setInt(1, userID);
+            pstmt.setString(2, subjectCode);
+            pstmt.setInt(3, userID);
+            ResultSet rs = pstmt.executeQuery();
+            List<StudentGrade> data = new ArrayList<>();
+            while(rs.next()) {
+                StudentGrade student = new StudentGrade();
+                student.setStudentID(rs.getString("student_id"));
+                student.setLastName(rs.getString("last_name"));
+                student.setFirstName(rs.getString("first_name"));
+                student.setMiddleName(rs.getString("middle_name"));
+                student.setGrade(rs.getDouble("grade"));
+                data.add(student);
+            }
+            return new SubjectGrade(userData, subjectCode, getSubjectName(subjectCode, userData), data);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public void deleteStudentGradeList(String studentID, String userData, String subjectCode) {
+        String sql = "DELETE FROM tbl_grades WHERE fk_enrolled_id = ?;";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setInt(1, getEnrolledID(studentID, userData, subjectCode));
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public void updateStudentGrade(List<StudentGrade> array) {
+        String sql = "UPDATE tbl_grades SET grade = ? WHERE fk_enrolled_id = ?;";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            array.forEach(e -> {
+               try {
+                   pstmt.setBigDecimal(1, new BigDecimal(e.getGrade()));
+                   pstmt.setInt(2, getEnrolledID(e.getStudentID(), e.getUserData(), e.getSubjectCode()));
+                   pstmt.executeUpdate();
+               } catch (SQLException err) {
+                   err.printStackTrace();
+                   throw new DataNotFoundException("Student not found.");
+               }
+            });
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DatabaseConnectionException("Database not found.");

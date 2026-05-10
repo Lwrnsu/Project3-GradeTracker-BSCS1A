@@ -9,6 +9,9 @@ import com.lwrnsu.student_grade_tracker.api.ApiResponse;
 import com.lwrnsu.student_grade_tracker.services.UserServices;
 
 import jakarta.validation.Valid;
+
+import java.util.List;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -87,12 +90,14 @@ public class UserController {
     @PostMapping("/add/subject/student")
     public ApiResponse enrollStudent(@Valid @RequestBody EnrollStudent enrollStudent) {
         userService.enrollStudent(enrollStudent);
+        userService.addStudentGradeList(enrollStudent);
         return new ApiResponse(true, "Student successfully enrolled.", null);
     }
 
     @ResponseStatus(HttpStatus.OK)
     @DeleteMapping("/delete/subject/student")
     public ApiResponse deleteEnrolledStudent(@RequestParam String studentID, @RequestParam String subjectCode, @RequestParam String userData) {
+        userService.deleteStudentGradeList(studentID, userData, subjectCode);
         userService.deleteEnrolledStudent(studentID, subjectCode, userData);
         return new ApiResponse(true, "Student successfully deleted from the subject", null);
     }
@@ -111,4 +116,16 @@ public class UserController {
         return new ApiResponse(true, "Subject Deleted Successfully", null);
     }
 
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/get/grades/{userData}/{subjectCode}")
+    public ApiResponse getStudentGrade(@PathVariable String userData, @PathVariable String subjectCode) {
+        return new ApiResponse(true, "Student grade successfully retrieved.", userService.getStudentGradeList(userData, subjectCode));
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/update/grades/student")
+    public ApiResponse updateStudentGrade(@RequestBody List<StudentGrade> array) {
+        userService.updateStudentGrade(array);
+        return new ApiResponse(true, "Grades updated successfully.", null);
+    }
 }
