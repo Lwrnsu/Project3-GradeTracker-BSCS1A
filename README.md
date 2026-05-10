@@ -15,7 +15,8 @@
  The Student Grade Tracker is a full-stack web application designed to simplify how teachers and administrators manage student records, subject data, and academic grades. It serves as a centralized tool to add, update, delete, and organize student and subject information, while automating the entire grade tracking process.
 
 💬 Ask us about 
-**- Full system design & development process ​ 
+
+- Full system design & development process ​ 
 - Front-end interface design (HTML/CSS/JavaScript) ​
 - Backend logic & Java implementation ​
 - Database setup, structure & MySQL management ​
