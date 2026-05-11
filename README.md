@@ -7,12 +7,13 @@
 
 <p align="left"> <a href="https://twitter.com//a" target="blank"><img src="https://img.shields.io/twitter/follow//a?logo=twitter&style=for-the-badge" alt="/a" /></a> </p>
 
-🔭 We're currently working on Student Grade Tracker. A web-based systemdfor efficient management and monitoring of student academic performance. 
+👨‍💻 We're currently working on Student Grade Tracker. A web-based systemdfor efficient management and monitoring of student academic performance. 
 
- 🌱 We are currently doing this project for our major subjects **Computer Programming 2, Information Management**
+💻 We are currently doing this project for our major subjects **Computer Programming 2, Information Management**
 
- 👯 Overview
- The Student Grade Tracker is a full-stack web application designed to simplify how teachers and administrators manage student records, subject data, and academic grades. It serves as a centralized tool to add, update, delete, and organize student and subject information, while automating the entire grade tracking process.
+📱Overview
+
+The Student Grade Tracker is a full-stack web application designed to simplify how teachers and administrators manage student records, subject data, and academic grades. It serves as a centralized tool to add, update, delete, and organize student and subject information, while automating the entire grade tracking process.
 
 💬 Ask us about 
 
