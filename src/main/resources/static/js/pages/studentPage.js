@@ -94,7 +94,6 @@ function displayModalContent(parent, id) {
                     value="${student.middleName}"
                     name="updateMiddleName"
                     id="updateMiddleName"
-                    required
                 >
                 <label for="updateMiddleName">Middle Name: </label>
             </div>

@@ -63,3 +63,9 @@ main {
 .content_container {
     height: 70%;
 }
+
+.testRow {
+    display: flex;
+    justify-content: space-between;
+    margin: 0px 12px;
+}

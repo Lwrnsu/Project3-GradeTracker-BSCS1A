@@ -83,7 +83,13 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/get/subject/{userData}/{subjectCode}")
     public ApiResponse getSubjectEnrolled(@PathVariable String userData, @PathVariable String subjectCode) {
-        return new ApiResponse(true, "Subject data successfully retrieved.", userService.getSubjectEnrolled(userData, subjectCode));
+        return new ApiResponse(true, "Subject data successfully retrieved.", null);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/get/subject/name/{userData}/{subjectCode}")
+    public ApiResponse getSubjectName(@PathVariable String userData, @PathVariable String subjectCode) {
+        return new ApiResponse(true, "Subject name successfully retrieved.", userService.getSubjectName(userData, subjectCode));
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -127,5 +133,25 @@ public class UserController {
     public ApiResponse updateStudentGrade(@RequestBody List<StudentGrade> array) {
         userService.updateStudentGrade(array);
         return new ApiResponse(true, "Grades updated successfully.", null);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PutMapping("/update")
+    public ApiResponse updateUser(@RequestBody UpdateUser updateUser) {
+        userService.updateUser(updateUser);
+        return new ApiResponse(true, "User successfully updated.", null);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/get/isEnrolled")
+    public ApiResponse isStudentEnrolled(@RequestParam String userData, @RequestParam String studentID, @RequestParam String subjectCode) {
+        return new ApiResponse(userService.isStudentEnrolled(userData, studentID, subjectCode), "Successfully checked the status.", null);
+    }
+
+    @ResponseStatus(HttpStatus.OK)
+    @PostMapping("/update/password")
+    public ApiResponse changePw(@Valid @RequestBody UpdatePw updatePw) {
+        userService.changePw(updatePw);
+        return new ApiResponse(true, "Password changed successfully.", null);
     }
 }
