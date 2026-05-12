@@ -24,4 +24,10 @@ document.addEventListener('click', (event) => {
     if(event.target.matches("#subjectsNav")) switchTabs("subject");
     if(event.target.matches("#gradesNav")) switchTabs("grades");
     if(event.target.matches("#accountNav")) switchTabs("account");
+    if(event.target.matches("#logOutNav")) {
+        sessionStorage.clear();
+        window.location.href = "/";
+    }
 });
+
+

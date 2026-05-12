@@ -38,7 +38,7 @@ public class Database {
     }
 
     public boolean isUserExist(String username) {
-        String sql = "SELECT username FROM tbl_users WHERE username=?;";
+        String sql = "SELECT username FROM tbl_faculty WHERE username=?;";
         try(
             Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -53,7 +53,7 @@ public class Database {
     }
 
     public String getPassword(String username) {
-        String sql = "SELECT password FROM tbl_users WHERE username=?;";
+        String sql = "SELECT password FROM tbl_faculty WHERE username=?;";
         try(
             Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -71,7 +71,7 @@ public class Database {
     }
 
     public void signUp(String lName, String fName, String mName, String username, String password) {
-        String sql = "INSERT INTO tbl_users(username, password, last_name, first_name, middle_name) VALUES (?, ?, ?, ?, ?);";
+        String sql = "INSERT INTO tbl_faculty(username, password, last_name, first_name, middle_name) VALUES (?, ?, ?, ?, ?);";
         try (
             Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -91,7 +91,7 @@ public class Database {
     }
 
     public String getLastName(String username) {
-        String sql = "SELECT last_name FROM tbl_users WHERE username=?;";
+        String sql = "SELECT last_name FROM tbl_faculty WHERE username=?;";
         try(
             Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -108,7 +108,7 @@ public class Database {
     }
 
     public String getFirstName(String username) {
-        String sql = "SELECT first_name FROM tbl_users WHERE username=?;";
+        String sql = "SELECT first_name FROM tbl_faculty WHERE username=?;";
         try(
             Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -125,7 +125,7 @@ public class Database {
     }
 
     public String getMiddleName(String username) {
-        String sql = "SELECT middle_name FROM tbl_users WHERE username=?;";
+        String sql = "SELECT middle_name FROM tbl_faculty WHERE username=?;";
         try(
             Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -142,7 +142,7 @@ public class Database {
     }
 
     public int getUserID(String username) {
-        String sql = "SELECT id FROM tbl_users WHERE username=?;";
+        String sql = "SELECT id FROM tbl_faculty WHERE username=?;";
         try(
             Connection conn = getConnection();
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -425,37 +425,6 @@ public class Database {
         }
     }
 
-    public SubjectEnrolled getSubjectEnrolled(String userData, String subjectCode) {
-        String sql = "SELECT sub.subject_code, sub.subject_name, stud.student_id, stud.last_name, stud.first_name, stud.middle_name, stud.year_level " +
-                "FROM tbl_enrolled AS enr " +
-                "JOIN tbl_subjects AS sub ON sub.id = enr.fk_subject_id " +
-                "JOIN tbl_students AS stud ON stud.id = enr.fk_student_id " +
-                "WHERE sub.subject_code = ? AND sub.fk_user_id = ? AND stud.fk_user_id = ?;";
-        try (
-            Connection conn = getConnection();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-        ) {
-            int userID = getUserID(userData);
-            pstmt.setString(1, subjectCode);
-            pstmt.setInt(2, userID);
-            pstmt.setInt(3, userID);
-            ResultSet rs = pstmt.executeQuery();
-            List<Student> studentEnrolledList = new ArrayList<>();
-            while(rs.next()) {
-                Student student = new Student();
-                student.setStudentId(rs.getString("student_id"));
-                student.setLastName(rs.getString("last_name"));
-                student.setFirstName(rs.getString("first_name"));
-                student.setMiddleName(rs.getString("middle_name"));
-                student.setYearLevel(rs.getInt("year_level"));
-                studentEnrolledList.add(student);
-            }
-            return new SubjectEnrolled(subjectCode, getSubjectName(subjectCode, userData), studentEnrolledList);
-        } catch (SQLException e) {
-            throw new DatabaseConnectionException("Database not found.");
-        }
-    }
-
     public int getStudentDBID(String studentID, String userData) {
         String sql = "SELECT id FROM tbl_students WHERE student_id = ? AND fk_user_id = ?;";
         try (
@@ -660,6 +629,80 @@ public class Database {
                    throw new DataNotFoundException("Student not found.");
                }
             });
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public boolean isStudentEnrolled(String userData, String studentID, String subjectCode) {
+        String sql = "SELECT * FROM tbl_enrolled AS enr " +
+                "JOIN tbl_students AS stud ON stud.id = enr.fk_student_id " +
+                "JOIN tbl_subjects AS sub ON sub.id = enr.fk_subject_id " +
+                "WHERE stud.student_id = ? AND sub.subject_code = ? " +
+                "AND stud.fk_user_id = ? AND sub.fk_user_id = ?;";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            int id = getUserID(userData);
+            pstmt.setString(1, studentID);
+            pstmt.setString(2, subjectCode);
+            pstmt.setInt(3, id);
+            pstmt.setInt(4, id);
+            ResultSet rs = pstmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public void updateUser(UpdateUser updateUser) {
+        String sql = "UPDATE tbl_faculty SET username = ?, last_name = ?, first_name = ?, middle_name = ? WHERE username = ?;";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setString(1, updateUser.getUserID());
+            pstmt.setString(2, updateUser.getLastName());
+            pstmt.setString(3, updateUser.getFirstName());
+            pstmt.setString(4, updateUser.getMiddleName());
+            pstmt.setString(5, updateUser.getOldUserID());
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public String getOldPW(String userData) {
+        String sql = "SELECT password FROM tbl_faculty WHERE username = ?;";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setString(1, userData);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("password");
+            }
+            throw new DataNotFoundException("User not found.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DatabaseConnectionException("Database not found.");
+        }
+    }
+
+    public void changePw(String userData, String hashedPw) {
+        String sql = "UPDATE tbl_faculty SET password = ? WHERE username = ?;";
+        try (
+            Connection conn = getConnection();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+        ) {
+            pstmt.setString(1, hashedPw);
+            pstmt.setString(2, userData);
+            pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
             throw new DatabaseConnectionException("Database not found.");

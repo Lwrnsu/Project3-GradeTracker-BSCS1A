@@ -71,8 +71,8 @@ public class UserServices {
         return database.getSubject(username);
     }
 
-    public SubjectEnrolled getSubjectEnrolled(String userData, String subjectCode) {
-        return database.getSubjectEnrolled(userData, subjectCode);
+    public String getSubjectName(String userData, String subjectCode) {
+        return database.getSubjectName(subjectCode, userData);
     }
 
     public void enrollStudent(EnrollStudent enrollStudent) {
@@ -105,6 +105,26 @@ public class UserServices {
 
     public void updateStudentGrade(List<StudentGrade> array) {
         database.updateStudentGrade(array);
+    }
+
+    public boolean isStudentEnrolled(String userData, String studentID, String subjectCode) {
+        return database.isStudentEnrolled(userData, studentID, subjectCode);
+    }
+
+    public void updateUser(UpdateUser updateUser) {
+        database.updateUser(updateUser);
+    }
+
+    public void changePw(UpdatePw updatePw) {
+        String oldPw = database.getOldPW(updatePw.getUserData());
+
+        if (encoder.matches(updatePw.getOldPw(), oldPw)) {
+            String hashedPw = encoder.encode(updatePw.getNewPw());
+            database.changePw(updatePw.getUserData(), hashedPw);
+        } else {
+            throw new InvalidCredentialsException("Wrong Password.");
+        }
+
     }
 }
 

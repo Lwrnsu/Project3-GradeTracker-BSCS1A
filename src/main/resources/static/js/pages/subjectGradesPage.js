@@ -89,5 +89,6 @@ editBtn.addEventListener("click", async function() {
             window.location.reload();
         }
         isEditing = false;
+        editBtn.innerText = "Edit Mode";
     }
 });
