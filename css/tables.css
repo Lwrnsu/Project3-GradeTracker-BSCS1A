@@ -1,0 +1,18 @@
+.rancepogi1 {
+    height: 70%;
+    background-color: whitesmoke;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+.mani {
+    padding: 20px;
+    display: flex;
+    flex-direction: rows;
+    justify-content: space-between;
+}
+.addstud {
+    padding-right: 20px;
+    display: flex;
+    justify-content: right;
+}

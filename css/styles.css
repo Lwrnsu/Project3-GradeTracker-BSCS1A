@@ -1,0 +1,145 @@
+root {
+    --primary-bg-color: #0067bc;
+}
+
+* {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+}
+main {
+    background-color: whitesmoke;
+}
+.top {
+    display: flex;
+    height: 15%;
+    background-color: white;
+    justify-content: left;
+    align-items: center;
+    padding-left: 20px;
+}
+.top h1 {
+    display: flex;
+    flex-direction: column;
+    font-size: 20px;
+    padding-left: 10px;
+}
+.mid {
+    height: 10%;
+    margin: 10px 100px;
+    background-color: whitesmoke;
+    border-bottom: 1px solid black;
+}
+.mid h1 {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+.bottom {
+    height: 70%;
+    background-color: whitesmoke;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 20px;
+    gap: 20px;
+}
+.con {
+    display: flex;
+    flex-direction: column;
+    height: 150px;
+    border-radius: 10px;
+    background-color: #0067bc;
+}
+.bottom1 {
+    margin: 10px;
+    background-color: white;
+}
+.bot1 {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    box-shadow: 5px 5px 15px black;
+}
+.bot1:hover {
+    background-color: #0067bc;
+}
+.top {
+    height: 10%;
+    box-shadow: 5px 2px 10px black;
+}
+.top1 {
+    height: 75%;
+    padding-left: 10px;
+    border-radius: 10px;
+    background-color:#0067bc;
+}
+.add {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 160px;
+}
+.add_button {
+    height: 100px;
+    width: 200px;
+}
+.add_button:hover {
+    background-color: #0067bc;
+}
+.header3 {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 20px;
+}
+.config {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 20px;
+}
+.bot2 {
+    height: 100px;
+    box-shadow: 5px 5px 5px black;
+}
+.bot2:hover {
+    background-color: #0067bc;
+}
+.bottomclasses {
+    display: flex;
+    flex-direction: column;
+}
+table {
+    margin: 20px;
+    box-shadow: 2px 2px 5px black;
+}
+.down {
+    text-align: center;
+    background-color: white;
+}
+.subjectheader {
+    display: flex;
+    justify-content: center;
+}
+.row {
+    text-align: center;
+    margin: 20px;
+    background-color: bisque;
+    font-size: 30px;
+}
+.back {
+    height: 50px;
+    width: 50px;
+    border-radius: 10px;
+}
+.back:hover {
+    background-color: #0067bc;
+}

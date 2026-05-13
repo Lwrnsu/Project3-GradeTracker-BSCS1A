@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Student Grade Tracker</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="..\css\tables.css">
+        <link rel="stylesheet" href="..\css\styles.css">
+        <link rel="stylesheet" href="..\css\nav.css">
+        <link rel="stylesheet" href="..\css\students.css">
+    </head>
+    <body>
+        <nav>
+            <img src="gc_logo.png" alt="Gordon College Logo">
+            <p>Lwrnsu</p>
+            <ul>
+                <li><button id="dash">Home</button></li>
+                <li><button class="active" id="students">Students</button></li>
+                <li><button id="courses">Subjects</button></li>
+                <li><button id="grades"">Grades</button></li>
+                <li><button id="account">Account</button></li>
+                <li><button class="logOut">Log Out</button></li>
+            </ul>
+        </nav>
+        <main>
+            <div class="top">
+                <h1>List of Students</h1>
+            </div>
+            <div class="mid"><h1>Welcome, Rance Dave Macaraeg!</h1></div>
+            <div class="rancepogi1">
+                    <header class="subjectheader"><h2>Students</h2></header>
+                <div class="addstud">
+                    <button class="addstudent" id="addstudent"">Add Student</button>
+                </div>
+                <table>
+                    <tr class="row">
+                        <td>ID</td>
+                        <td>Year Level</td>
+                        <td>Lastname</td>
+                        <td>Firstname</td>
+                        <td>Middlename</td>
+                        <td>Update</td>
+                    </tr>
+                    <tr class="down">
+                        <td>202512251</td>
+                        <td>1</td>
+                        <td>Macaraeg</td>
+                        <td>Rance Dave</td>
+                        <td>Meran</td>
+                        <td>
+                            <button class="update" id="update">Update</button>
+                            <button class="delete" id="delete">Delete</button>
+                        </td>
+                    </tr>
+                    <tr class="down">
+                        <td>202513369</td>
+                        <td>1</td>
+                        <td>Pascasio</td>
+                        <td>Jillian Carl</td>
+                        <td>Marty</td>
+                        <td>
+                            <button class="update" id="update">Update</button>
+                            <button class="delete" id="delete">Delete</button>
+                        </td>
+                    </tr>
+                    <tr class="down">
+                        <td>202510446</td>
+                        <td>1</td>
+                        <td>Llarves</td>
+                        <td>Jhustine Rose</td>
+                        <td>Roy</td>
+                        <td>
+                            <button class="update" id="update">Update</button>
+                            <button class="delete" id="delete">Delete</button>
+                        </td>
+                    </tr>
+                    <tr class="down">
+                        <td>202512473</td>
+                        <td>1</td>
+                        <td>Vega</td>
+                        <td>Lorical Rhodelyn</td>
+                        <td>Caparas</td>
+                        <td>
+                            <button class="update" id="update">Update</button>
+                            <button class="delete" id="delete">Delete</button>
+                        </td>
+                    </tr>
+                    <tr class="down">
+                        <td>202512055</td>
+                        <td>1</td>
+                        <td>Elisan</td>
+                        <td>Aleiyah Cute</td>
+                        <td>Lamban</td>
+                        <td>
+                            <button class="update" id="update">Update</button>
+                            <button class="delete" id="delete">Delete</button>
+                        </td>
+                    </tr>
+                    <tr class="down">
+                        <td>202510140</td>
+                        <td>1</td>
+                        <td>Salonga</td>
+                        <td>Paul Addy</td>
+                        <td>Javier</td>
+                        <td>
+                            <button class="update" id="update">Update</button>
+                            <button class="delete" id="delete">Delete</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </main>
+        <div class="modal-overlay" id="modalOverlay">
+            <div class="student-modal" id="studentModal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+            <div class="modal-header">
+            <h2 id="modal-title">Add New Student</h2>
+            <button class="modal-close" id="modalClose">&times;</button>
+        </div>
+        <div class="modal-body">
+            <label>Last Name
+                <input type="text" id="modal-lname">
+            </label>
+            <label>First Name
+                <input type="text" id="modal-fname">
+            </label>
+            <label>Middle Name
+                <input type="text" id="modal-mname">
+            </label>
+            <label>Year Level
+                <input type="number" id="modal-yearl">
+            </label>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-cancel" id="modalCancel">Cancel</button>
+            <button class="btn-save" id="modalSaveBtn">Add Student</button>
+            </div>
+            </div>
+        </div>
+        <script src="..\js\student.js"></script>
+        <script src="..\js\nav.js"></script>
+    </body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Student Grade Tracker</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="..\css\styles.css">
+        <link rel="stylesheet" href="..\css\nav.css">
+        <link rel="stylesheet" href="..\css\subjects.css">
+    </head>
+    <body>
+        <nav>
+            <img src="gc_logo.png" alt="Gordon College Logo">
+            <p>Lwrnsu</p>
+            <ul>
+                <li><button id="dash">Home</button></li>
+                <li><button id="students">Students</button></li>
+                <li><button id="courses">Subjects</button></li>
+                <li><button class="active" id="grades"">Grades</button></li>
+                <li><button id="account">Account</button></li>
+                <li><button class="logOut">Log Out</button></li>
+            </ul>
+        </nav>
+        <main>
+            <div class="top">
+                <h1>List of Courses</h1>
+            </div>
+            <div class="mid"><h1>Welcome, Rance Dave Macaraeg!</h1></div>
+            <div class="bottom">
+                    <p class="up">
+                        Search
+                        <input class= "search" type="form" name="search" id="search">
+                        <button class="sort" id="sort">Sort by</button>
+                        <button class="addsubject" id="addsubject">Add Subject</button>
+                    </p>
+                    <div class="listofsub">
+                        <div class="sample1">
+                            <header class="sub">Computer Programming II</header>
+                            <div class="sample1enter">
+                            <button class="entersub" 
+                            onclick="window.location.href='cplab1.html'">
+                            Enter
+                            </button>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </main>
+    <div class="modal-overlay" id="modalOverlay">
+            <div class="addmodal" id="addmodal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+                <div class="modal-header">
+                    <h2 id="modal-title">Add New Subject</h2>
+                        <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <label>Subject ID
+                    <input type="text" id="subjectid">
+                </label>
+                <label>Subject Name
+                    <input type="text" id="subjectname">
+                </label>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" id="modalCancel">Cancel</button>
+                <button class="btn-save" id="modalSave">Save Subject</button>
+                </div>
+            </div>
+    </div>
+        <script src="..\js\nav.js"></script>
+        <script src="..\js\subjects.js"></script>
+        <script src="..\js\nav.js"></script>
+    </body>
+</html>
